@@ -1,37 +1,64 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Solaris Trading</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solaris Terminal</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body { background: #0b0e11; color: white; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; }
-        .card { background: #161a1e; border-radius: 12px; padding: 20px; width: 100%; margin-bottom: 15px; border-left: 4px solid #00ffcc; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-        .label { color: #848e9c; font-size: 14px; margin-bottom: 5px; }
-        .value { font-size: 24px; font-weight: bold; color: #00ffcc; }
-        .btn-trade { background: #00ffcc; color: black; border: none; padding: 15px; border-radius: 8px; width: 100%; font-weight: bold; font-size: 18px; margin-top: 20px; }
+        body { background: #0b0e11; color: white; font-family: 'Inter', sans-serif; margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; }
+        .header { font-size: 20px; font-weight: 800; color: #00ffcc; letter-spacing: 2px; margin-bottom: 20px; text-shadow: 0 0 10px rgba(0,255,204,0.3); }
+        .card { background: #161a1e; border-radius: 12px; padding: 15px; width: 90%; margin-bottom: 15px; border-left: 4px solid #00ffcc; }
+        .label { color: #848e9c; font-size: 12px; text-transform: uppercase; margin-bottom: 5px; }
+        .value { font-size: 26px; font-weight: bold; }
+        #chart-container { width: 100%; height: 300px; border-radius: 12px; overflow: hidden; margin-top: 10px; border: 1px solid #30363d; }
+        .btn-trade { background: #00ffcc; color: #0b0e11; border: none; padding: 18px; border-radius: 12px; width: 100%; font-weight: 900; font-size: 16px; margin-top: 20px; cursor: pointer; }
     </style>
 </head>
 <body>
-    <h2 style="color: #00ffcc;">SOLARIS TERMINAL</h2>
+    <div class="header">SOLARIS TERMINAL</div>
     
     <div class="card">
-        <div class="label">Рынок BTC / USDT</div>
+        <div class="label">Bitcoin / USDT</div>
         <div id="price" class="value">Загрузка...</div>
     </div>
 
-    <div class="card">
-        <div class="label">VIP СИГНАЛ</div>
-        <div class="value" style="color: #ffaa00;">ОЖИДАНИЕ...</div>
+    <div id="chart-container">
+        <div id="tradingview_chart"></div>
     </div>
 
-    <button class="btn-trade">ОТКРЫТЬ СДЕЛКУ</button>
+    <button class="btn-trade" onclick="sendOrder()">ОТКРЫТЬ СДЕЛКУ (BUY)</button>
 
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <script>
         let tg = window.Telegram.WebApp;
         tg.expand();
-        // В будущем сюда будем тянуть данные из Bybit через твой Python бот
-        document.getElementById('price').innerText = "$81,050.1";
+        tg.MainButton.hide();
+
+        // Подхватываем цену из ссылки
+        const urlParams = new URLSearchParams(window.location.search);
+        const price = urlParams.get('price') || "---";
+        document.getElementById('price').innerText = "$" + price;
+
+        // Инициализация графика
+        new TradingView.widget({
+            "autosize": true,
+            "symbol": "BYBIT:BTCUSDT",
+            "interval": "60",
+            "timezone": "Etc/UTC",
+            "theme": "dark",
+            "style": "1",
+            "locale": "ru",
+            "toolbar_bg": "#f1f3f6",
+            "enable_publishing": false,
+            "hide_top_toolbar": true,
+            "container_id": "tradingview_chart"
+        });
+
+        function sendOrder() {
+            tg.sendData("order_buy"); // Отправляет сигнал обратно в Python
+            tg.close();
+        }
     </script>
 </body>
 </html>
