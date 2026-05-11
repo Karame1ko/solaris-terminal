@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Solaris Trading</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body { background: #0b0e11; color: white; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        .card { background: #161a1e; border-radius: 12px; padding: 20px; width: 100%; margin-bottom: 15px; border-left: 4px solid #00ffcc; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .label { color: #848e9c; font-size: 14px; margin-bottom: 5px; }
+        .value { font-size: 24px; font-weight: bold; color: #00ffcc; }
+        .btn-trade { background: #00ffcc; color: black; border: none; padding: 15px; border-radius: 8px; width: 100%; font-weight: bold; font-size: 18px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h2 style="color: #00ffcc;">SOLARIS TERMINAL</h2>
+    
+    <div class="card">
+        <div class="label">Рынок BTC / USDT</div>
+        <div id="price" class="value">Загрузка...</div>
+    </div>
+
+    <div class="card">
+        <div class="label">VIP СИГНАЛ</div>
+        <div class="value" style="color: #ffaa00;">ОЖИДАНИЕ...</div>
+    </div>
+
+    <button class="btn-trade">ОТКРЫТЬ СДЕЛКУ</button>
+
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+        // В будущем сюда будем тянуть данные из Bybit через твой Python бот
+        document.getElementById('price').innerText = "$81,050.1";
+    </script>
+</body>
+</html>
